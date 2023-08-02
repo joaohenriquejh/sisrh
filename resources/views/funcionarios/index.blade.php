@@ -4,8 +4,12 @@
 
 @section('content')
 
-    <x-btn-create/>
-    <h1 class="fs-1 mb-5">Lista de Funcionários</h1>
+    <x-btn-create>
+      <x-slot name="route">/funcionarios/novo</x-slot>
+      <x-slot name="title">Cadastrar Funcionário</x-slot>
+    </x-btn-create>
+
+    <h1 class="fs-2 mb-3">Lista de Funcionários</h1>
 
     <table class="table table-striped">
         <thead class="table-dark">
