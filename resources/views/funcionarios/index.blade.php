@@ -1,11 +1,11 @@
 @extends('layouts.default')
 
-@section('title', 'SisRH - Funcionários') 
+@section('title', 'SisRH - Funcionários')
 
 @section('content')
 
     <x-btn-create>
-      <x-slot name="route">/funcionarios/novo</x-slot>
+      <x-slot name="route">{{ @route('funcionarios.create') }}</x-slot>
       <x-slot name="title">Cadastrar Funcionário</x-slot>
     </x-btn-create>
 
