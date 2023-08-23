@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cargo;
+use App\Models\Funcionario;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class FuncionarioController extends Controller
 {
@@ -13,8 +15,10 @@ class FuncionarioController extends Controller
      */
     public function index()
     {
+        $funcionarios = Funcionario::all()->sortBy('nome');
+
         // Receber os dados do banco através do model
-        return view('funcionarios.index');
+        return view('funcionarios.index', compact('funcionarios'));
     }
 
     /**
@@ -25,7 +29,7 @@ class FuncionarioController extends Controller
         // Retornar o formulário de cadastro
         $departamentos = Departamento::all()->sortBy('nome');
         $cargos = Cargo::all()->sortBy('descricao');
-        return view('funcionarios.create', compact('departamentos', 'cargos')) ;
+        return view('funcionarios.create', compact('departamentos', 'cargos'));
     }
 
     /**
@@ -34,7 +38,9 @@ class FuncionarioController extends Controller
     public function store(Request $request)
     {
         $input = $request->toArray();
-        dd($input);
+        $input['user_id'] = 1;
+        Funcionario::create($input);
+        return redirect()->route('funcionarios.index')->with('Sucesso', 'Funcionario cadastrado com sucesso');
     }
 
     /**
