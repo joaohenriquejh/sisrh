@@ -55,10 +55,10 @@ class FuncionarioController extends Controller
         $nomeArquivo = $foto->hashName();
 
         // Redimensionar foto
-       $imagem = Image::make($foto)->fit(200,200);
+        $imagem = Image::make($foto)->fit(200, 200);
 
         //Salvar arquivo da foto
-        Storage::put('public/funcionarios/'.$nomeArquivo, $imagem->encode());
+        Storage::put('public/funcionarios/' . $nomeArquivo, $imagem->encode());
         //$foto->store('public/funcionarios/');
 
         return $nomeArquivo;
@@ -77,7 +77,14 @@ class FuncionarioController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $funcionario = Funcionario::find($id);
+
+        if (!$funcionario) {
+            return back();
+        }
+        $departamentos = Departamento::all()->sortBy('nome');
+        $cargos = Cargo::all()->sortBy('descricao');
+        return view('funcionarios.edit', compact('funcionario', 'departamentos', 'cargos'));
     }
 
     /**
@@ -93,6 +100,10 @@ class FuncionarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $funcionario = Funcionario::find($id);
+
+        if (!$funcionario) {
+            return back();
+        }
     }
 }

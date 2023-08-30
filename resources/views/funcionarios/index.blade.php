@@ -34,15 +34,15 @@
                         @if (empty($funcionario->foto))
                             <img src="/images/sombra_funcionario.jpg" alt="Foto" class="img-thumbnail" width="70px">
                         @else
-                            <img src="" alt="Foto" class="img-thumbnail" width="70px">
+                            <img src="{{ url("storage/funcionarios/$funcionario->foto") }}" alt="Foto" class="img-thumbnail" width="70px">
                         @endif
                     </td>
                     <td>{{ $funcionario->nome }}</td>
                     <td>{{ $funcionario->cargo->descricao }}</td>
                     <td>{{ $funcionario->departamento->nome }}</td>
                     <td>
-                        <a href="" title="Editar" class="btn btn-primary"><i class="bi bi-pen"></i></a>
-                        <a href="" title="Remover" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                        <a href="{{ route('funcionarios.edit', $funcionario->id) }}" title="Editar" class="btn btn-primary"><i class="bi bi-pen"></i></a>
+                        <a href="#" title="Remover" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                     </td>
                 </tr>
             @endforeach
