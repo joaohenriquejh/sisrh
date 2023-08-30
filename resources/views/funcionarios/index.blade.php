@@ -12,7 +12,7 @@
     <h1 class="fs-2 mb-3">Lista de Funcionários</h1>
 
     @if (Session::get('sucesso'))
-        <div class="alert alert_success text-center">{{ Session::get('sucesso') }}</div>
+        <div class="alert alert-success text-center">{{ Session::get('sucesso') }}</div>
     @endif
 
     <table class="table table-striped">
