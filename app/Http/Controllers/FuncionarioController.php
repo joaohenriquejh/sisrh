@@ -55,11 +55,11 @@ class FuncionarioController extends Controller
         $nomeArquivo = $foto->hashName();
 
         // Redimensionar foto
-       //$imagem = Image::make($foto)->fit(200,200);
+       $imagem = Image::make($foto)->fit(200,200);
 
         //Salvar arquivo da foto
-        //Storage::put('public/funcionarios/'.$nomeArquivo, $imagem->endcode());
-        $foto->store('public/funcionarios/');
+        Storage::put('public/funcionarios/'.$nomeArquivo, $imagem->encode());
+        //$foto->store('public/funcionarios/');
 
         return $nomeArquivo;
     }
