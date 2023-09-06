@@ -59,7 +59,7 @@ class FuncionarioController extends Controller
 
         //Salvar arquivo da foto
         Storage::put('public/funcionarios/' . $nomeArquivo, $imagem->encode());
-        //$foto->store('public/funcionarios/');
+
 
         return $nomeArquivo;
     }
@@ -92,7 +92,18 @@ class FuncionarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $input = $request->toArray();
+
+        $funcionario = Funcionario::find($id);
+
+        if($request->hasFile('foto')){
+            Storage::delete('public/funcionarios/'.$funcionario['foto']);
+            $input['foto'] = $this->uploadFoto($request->foto);
+        }
+
+        $funcionario->fill($input);
+        $funcionario->save();
+        return redirect()->route('funcionarios.index')->with('sucesso','Funcionário alterado com sucesso!');
     }
 
     /**
