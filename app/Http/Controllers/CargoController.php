@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cargo;
 use Illuminate\Http\Request;
 
 class CargoController extends Controller
@@ -11,7 +12,10 @@ class CargoController extends Controller
      */
     public function index()
     {
-        //
+        $cargos = Cargo::all()->sortBy('descricao');
+
+        // Receber os dados do banco através do model
+        return view('cargos.index', compact('cargos'));
     }
 
     /**
@@ -19,7 +23,8 @@ class CargoController extends Controller
      */
     public function create()
     {
-        //
+        $cargos = Cargo::all()->sortBy('descricao');
+        return view('cargos.create', compact('cargos'));
     }
 
     /**
@@ -27,7 +32,12 @@ class CargoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->toArray();
+        $input['user_id'] = 1;
+
+
+        Cargo::create($input);
+        return redirect()->route('cargos.index')->with('sucesso', 'Cargo cadastrado com sucesso');
     }
 
     /**
@@ -43,7 +53,13 @@ class CargoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $cargo = Cargo::find($id);
+
+        if (!$cargo) {
+            return back();
+        }
+        $cargos = Cargo::all()->sortBy('nome');
+        return view('cargos.edit', compact('cargo', 'cargos'));
     }
 
     /**
@@ -51,7 +67,13 @@ class CargoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $input = $request->toArray();
+
+        $cargo = Cargo::find($id);
+
+        $cargo->fill($input);
+        $cargo->save();
+        return redirect()->route('cargos.index')->with('sucesso', 'Cargo alterado com sucesso!');
     }
 
     /**
@@ -59,6 +81,10 @@ class CargoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $cargo = Cargo::find($id);
+
+        // Apagando o registro no banco de dados
+        $cargo->delete();
+        return redirect()->route('cargos.index')->with('sucesso', 'Cargo excluído com sucesso');
     }
 }
