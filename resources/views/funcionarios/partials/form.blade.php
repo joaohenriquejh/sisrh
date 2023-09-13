@@ -11,9 +11,12 @@
     <label for="sexo" class="form-label">Sexo</label>
     <select name="sexo" id="sexo" class="form-select" required>
         <option value=""></option>
-        <option value="m" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'm') @endif>Masculino</option>
-        <option value="f" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'f') @endif>Feminino</option>
-        <option value="o" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'o') @endif>Outros</option>
+        <option value="m" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'm') @endif>Masculino
+        </option>
+        <option value="f" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'f') @endif>Feminino
+        </option>
+        <option value="o" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'o') @endif>Outros
+        </option>
     </select>
 </div>
 <div class="col-md-4">
@@ -70,11 +73,11 @@
     <input type="date" class="form-control" id="data_desligamento" name="data_desligamento"
         value="{{ $funcionario->data_desligamento ?? '' }}">
 </div>
-<div class="col-md-2">
-    @if ($funcionario->foto)
-        <img src="{{ asset("storage/funcionarios/$funcionario->foto") }}" class="img-thumbnail">
+<div class="col-2">
+    @if (isset($funcionario->foto))
+        <img src="{{ asset("storage/funcionarios/$funcionario->foto") }}" alt="" class="img-thumbnail">
     @else
-        <img src={{ asset('images/sombra_funcionario.jpg') }} alt="" class="img-thumbnail">
+        <img src="/images/sombra_funcionario.jpg" alt="" class="img-thumbnail">
     @endif
 </div>
 <div class="col-md-10">
