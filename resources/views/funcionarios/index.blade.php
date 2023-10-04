@@ -10,10 +10,15 @@
     </x-btn-create>
 
     <h1 class="fs-2 mb-3">Lista de Funcionários</h1>
-
+    <p>Total de Funcionários {{ $totalFuncionario }}</p>
     @if (Session::get('sucesso'))
         <div class="alert alert-success text-center">{{ Session::get('sucesso') }}</div>
     @endif
+
+    <x-busca>
+        <x-slot name="rota"> {{ route('funcionarios.index') }}</x-slot>
+        <x-slot name="tipo">Funcionário</x-slot>
+    </x-busca>
 
     <table class="table table-striped">
         <thead class="table-dark">
@@ -34,15 +39,18 @@
                         @if (empty($funcionario->foto))
                             <img src="/images/sombra_funcionario.jpg" alt="Foto" class="img-thumbnail" width="70px">
                         @else
-                            <img src="{{ url("storage/funcionarios/$funcionario->foto") }}" alt="Foto" class="img-thumbnail" width="70px">
+                            <img src="{{ url("storage/funcionarios/$funcionario->foto") }}" alt="Foto"
+                                class="img-thumbnail" width="70px">
                         @endif
                     </td>
                     <td>{{ $funcionario->nome }}</td>
                     <td>{{ $funcionario->cargo->descricao }}</td>
                     <td>{{ $funcionario->departamento->nome }}</td>
                     <td>
-                        <a href="{{ route('funcionarios.edit', $funcionario->id) }}" title="Editar" class="btn btn-primary"><i class="bi bi-pen"></i></a>
-                        <a href="#" title="Deletar" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-delete-{{ $funcionario->id }}"><i class="bi bi-trash"></i></a>
+                        <a href="{{ route('funcionarios.edit', $funcionario->id) }}" title="Editar"
+                            class="btn btn-primary"><i class="bi bi-pen"></i></a>
+                        <a href="#" title="Deletar" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modal-delete-{{ $funcionario->id }}"><i class="bi bi-trash"></i></a>
                         {{-- Inserir o componente modal na view --}}
                         <x-modal-delete>
                             <x-slot name="id">{{ $funcionario->id }}</x-slot>
@@ -55,4 +63,10 @@
             @endforeach
         </tbody>
     </table>
+    <style>
+        .pagination {
+            justify-content: center;
+        }
+    </style>
+    {{ $funcionarios->links() }}
 @endsection
