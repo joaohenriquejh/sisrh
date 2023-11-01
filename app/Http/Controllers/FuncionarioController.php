@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Storage;
 
 class FuncionarioController extends Controller
 {
+    // Verificar se o usuários está logado no sistema
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */

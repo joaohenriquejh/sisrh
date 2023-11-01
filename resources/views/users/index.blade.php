@@ -11,6 +11,13 @@
 
     <h1 class="fs-2 mb-3">Lista de Usuários</h1>
 
+    <p> Total de Usuários {{ $totalUsers }} </p>
+
+    <x-busca>
+        <x-slot name="rota"> {{ route('users.index') }}</x-slot>
+        <x-slot name="tipo">Usuário</x-slot>
+    </x-busca>
+
     @if (Session::get('sucesso'))
         <div class="alert alert-success text-center">{{ Session::get('sucesso') }}</div>
     @endif
@@ -31,8 +38,10 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
-                        <a href="{{ route('users.edit', $user->id) }}" title="Editar" class="btn btn-primary"><i class="bi bi-pen"></i></a>
-                        <a href="#" title="Deletar" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-delete-{{ $user->id }}"><i class="bi bi-trash"></i></a>
+                        <a href="{{ route('users.edit', $user->id) }}" title="Editar" class="btn btn-primary"><i
+                                class="bi bi-pen"></i></a>
+                        <a href="#" title="Deletar" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modal-delete-{{ $user->id }}"><i class="bi bi-trash"></i></a>
                         {{-- Inserir o componente modal na view --}}
                         <x-modal-delete>
                             <x-slot name="id">{{ $user->id }}</x-slot>
@@ -45,4 +54,10 @@
             @endforeach
         </tbody>
     </table>
+    <style>
+        .pagination {
+            justify-content: center;
+        }
+    </style>
+    {{ $users->links() }}
 @endsection
