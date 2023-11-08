@@ -52,12 +52,11 @@ class UserController extends Controller
             return back();
         }
 
-        if(auth()->user()->id == $user['id'] || auth()->user()->tipo == 'admin'){
+        if (auth()->user()->id == $user['id'] || auth()->user()->tipo == 'admin') {
             return view('users.edit', compact('user'));
-        }else{
+        } else {
             return back();
         }
-
     }
 
     public function update(Request $request, string $id)
@@ -74,7 +73,11 @@ class UserController extends Controller
 
         $user->fill($input);
         $user->save();
-        return redirect()->route('users.index')->with('sucesso', 'Usuário alterado com sucesso!');
+        if ($user->tipo == "admin") {
+            return redirect()->route('users.index')->with('sucesso', 'Usuário alterado com sucesso!');
+        }else{
+            return redirect()->route('users.edit', $user->id)->with('sucesso','Usuário alterado com sucesso!');
+        }
     }
 
     public function destroy(string $id)

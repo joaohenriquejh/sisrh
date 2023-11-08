@@ -13,13 +13,15 @@
     <input type="email" class="form-control" id="email" name="email" value="{{ $user->email ?? '' }}">
 </div>
 
-<div class="col-md-6">
-    <label for="tipo" class="form-label">Tipo</label>
-    <select name="tipo" id="tipo" class="form-select" required>
-        <option value="">--</option>
-        <option value="admin" @if (isset($user->tipo)) @selected($user->tipo == 'admin') @endif>Admin
-        </option>
-        <option value="usuario" @if (isset($user->tipo)) @selected($user->tipo == 'usuario') @endif>Usuário
-        </option>
-    </select>
-</div>
+@can('type-user')
+    <div class="col-md-6">
+        <label for="tipo" class="form-label">Tipo</label>
+        <select name="tipo" id="tipo" class="form-select" required>
+            <option value="">--</option>
+            <option value="admin" @if (isset($user->tipo)) @selected($user->tipo == 'admin') @endif>Admin
+            </option>
+            <option value="usuario" @if (isset($user->tipo)) @selected($user->tipo == 'usuario') @endif>Usuário
+            </option>
+        </select>
+    </div>
+@endcan
