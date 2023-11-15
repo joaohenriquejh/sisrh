@@ -70,7 +70,7 @@
             new Chart(graficoDepartamentos, {
                 type: 'bar',
                 data: {
-                    labels: ['jan', 'fev', 'mar'],
+                    //labels: ['jan', 'fev', 'mar'],
                     datasets: [{
                         axis: 'y',
                         label: '',

@@ -14,7 +14,7 @@
         @include('funcionarios.partials.form')
 
         <div class="col-12">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
+            <button type="submit" class="btn btn-primary">Alterar</button>
             <a href="{{ route('funcionarios.index') }}" class="btn btn-danger">Cancelar</a>
         </div>
     </form>
