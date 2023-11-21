@@ -30,6 +30,7 @@
                     <td>{{ $cargo->descricao }}</td>
                     <td>
                         <a href="{{ route('cargos.edit', $cargo->id) }}" title="Editar" class="btn btn-primary"><i class="bi bi-pen"></i></a>
+                        <a href="{{ route('cargos.show', $cargo->id) }}" title="Show" class="btn btn-info"><i class="bi bi-info-circle-fill"></i></a>
 
                     </td>
                 </tr>

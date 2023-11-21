@@ -41,8 +41,8 @@
             <div class="bg-success shadow p-3 text-center text-white d-flex d-flex g-5 align-items-center rounded">
                 <i class="bi bi-currency-dollar fs-1 me-3"></i>
                 <div class="w-100">
-                    <span class="fs-5 d-block">Total salário:</span>
-                    <span class="fs-2"><b>{{ number_format($totalSalario, 2, ',', '.' )}}</b></span>
+                    <span class="fs-5 d-block">Folha de pagamento:</span>
+                    <span class="fs-2"><b>{{ number_format($totalSalario, 2, ',','.') }}</b></span>
                 </div>
             </div>
         </div>
@@ -65,16 +65,27 @@
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+
             const graficoDepartamentos = document.getElementById('grafico-departamentos');
 
             new Chart(graficoDepartamentos, {
                 type: 'bar',
                 data: {
-                    //labels: ['jan', 'fev', 'mar'],
+                    //labels: ['jan', 'fev', 'março'],
+                    labels: [
+                        @foreach ($departamentos as $departamento)
+                            '{{ $departamento->nome }}',
+                        @endforeach
+                    ],
                     datasets: [{
                         axis: 'y',
                         label: '',
-                        data: [10, 50],
+                        //data: [10, 50, 100],
+                        data: [
+                            @foreach ($departamentos as $departamento)
+                                {{ $departamento->funcionariosAtivos->count(); }},
+                            @endforeach
+                        ],
                         fill: false,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
@@ -112,10 +123,18 @@
             new Chart(graficoCargos, {
                 type: 'doughnut',
                 data: {
-                    labels: ['jan', 'fev'],
+                    labels: [
+                        @foreach ($cargos as  $cargo)
+                            '{{ $cargo->descricao }}',
+                        @endforeach
+                    ],
                     datasets: [{
                         label: '',
-                        data: [20, 30],
+                        data: [
+                            @foreach ($cargos as $cargo)
+                                {{ $cargo->funcionariosAtivos->count(); }},
+                            @endforeach
+                        ],
                         backgroundColor: [
                             'rgb(255, 99, 132)',
                             'rgb(255, 159, 64)',

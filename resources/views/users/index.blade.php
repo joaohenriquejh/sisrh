@@ -28,7 +28,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Usuário</th>
                 <th scope="col">E-mail</th>
-                <th scope="col" width="110px">Ações</th>
+                <th scope="col" width="150px">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -49,6 +49,7 @@
                             <x-slot name="nome">{{ $user->name }}</x-slot>
                             <x-slot name="rota">users.destroy</x-slot>
                         </x-modal-delete>
+                        <a href="{{ route('users.show', $user->id) }}" title="Show" class="btn btn-info"><i class="bi bi-info-circle-fill"></i></a>
                     </td>
                 </tr>
             @endforeach

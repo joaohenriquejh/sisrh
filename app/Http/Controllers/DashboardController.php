@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(){
 
         $totalFuncionarios = Funcionario::where('status', 'on')->count();
@@ -18,9 +23,7 @@ class DashboardController extends Controller
 
         // Dados dos departamentos
         $departamentos = Departamento::all()->sortBy('nome');
-        foreach($departamentos AS $departamento){
-            $nomeDepartamento[] = "'".$departamento->nome."'";
-        }
-        return view('dashboard.index', compact('totalFuncionarios', 'totalCargos', 'totalDepartamentos', 'totalSalario'));
+        $cargos = Cargo::all()->sortBy('descricao');
+        return view('dashboard.index', compact('totalFuncionarios', 'totalCargos', 'totalDepartamentos', 'totalSalario', 'departamentos', 'cargos'));
     }
 }

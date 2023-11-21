@@ -6,6 +6,7 @@ use App\Models\Cargo;
 use App\Models\Beneficio;
 use App\Models\Funcionario;
 use App\Models\Departamento;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ class FuncionarioController extends Controller
      */
     public function index(Request $request)
     {
-        $funcionarios = Funcionario::where('nome', 'like', '%'.$request->busca.'%')->orderBy('nome', 'asc')->paginate(3);
+        $funcionarios = Funcionario::where('nome', 'like', '%' . $request->busca . '%')->orderBy('nome', 'asc')->paginate(3);
 
         $totalFuncionario = Funcionario::all()->count();
 
@@ -39,7 +40,8 @@ class FuncionarioController extends Controller
         $departamentos = Departamento::all()->sortBy('nome');
         $cargos = Cargo::all()->sortBy('descricao');
         $beneficios = Beneficio::all()->sortBy('descricao');
-        return view('funcionarios.create', compact('departamentos', 'cargos', 'beneficios'));
+        
+        return view('funcionarios.create', ['modo' => 'create'], compact('departamentos', 'cargos', 'beneficios'));
     }
 
     /**
@@ -58,7 +60,7 @@ class FuncionarioController extends Controller
 
         $funcionario = Funcionario::create($input);
 
-        if($request->beneficios){
+        if ($request->beneficios) {
             //Cadastro do funcionários com os benefícios
             $funcionario->beneficios()->attach($request->beneficios);
         }
@@ -85,7 +87,21 @@ class FuncionarioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $funcionario = Funcionario::find($id);
+
+        if (!$funcionario) {
+            return back();
+        }
+        $departamentos = Departamento::all()->sortBy('nome');
+        $cargos = Cargo::all()->sortBy('descricao');
+        $beneficios = Beneficio::all()->sortBy('descricao');
+
+        $cadastradoPor = User::find($funcionario->user_id);
+        //Preparar array com os ID dos beneficios do funcionário
+        foreach ($funcionario->beneficios as $beneficio) {
+            $beneficio_selecionados[] = $beneficio->id;
+        }
+        return view('funcionarios.show', ['modo' => 'show', 'funcionario' => $funcionario], compact('funcionario', 'departamentos', 'cargos', 'beneficios', 'beneficio_selecionados', 'cadastradoPor'));
     }
 
     /**
@@ -101,12 +117,13 @@ class FuncionarioController extends Controller
         $departamentos = Departamento::all()->sortBy('nome');
         $cargos = Cargo::all()->sortBy('descricao');
         $beneficios = Beneficio::all()->sortBy('descricao');
+        $cadastradoPor = User::find($funcionario->user_id);
 
         //Preparar array com os ID dos beneficios do funcionário
-        foreach($funcionario->beneficios AS $beneficio){
+        foreach ($funcionario->beneficios as $beneficio) {
             $beneficio_selecionados[] = $beneficio->id;
         }
-        return view('funcionarios.edit', compact('funcionario', 'departamentos', 'cargos', 'beneficios', 'beneficio_selecionados'));
+        return view('funcionarios.edit', ['modo' => 'edit', 'funcionario' => $funcionario], compact('funcionario', 'departamentos', 'cargos', 'beneficios', 'beneficio_selecionados', 'cadastradoPor'));
     }
 
     /**
@@ -118,14 +135,23 @@ class FuncionarioController extends Controller
 
         $funcionario = Funcionario::find($id);
 
-        if($request->hasFile('foto')){
-            Storage::delete('public/funcionarios/'.$funcionario['foto']);
+        foreach ($funcionario->beneficios as $beneficio) {
+            $beneficio_selecionados[] = $beneficio->id;
+        };
+
+        $funcionario->beneficios()->detach($beneficio_selecionados);
+        $funcionario->beneficios()->attach($request->beneficios);
+
+
+        if ($request->hasFile('foto')) {
+            Storage::delete('public/funcionarios/' . $funcionario['foto']);
             $input['foto'] = $this->uploadFoto($request->foto);
         }
 
+        
         $funcionario->fill($input);
         $funcionario->save();
-        return redirect()->route('funcionarios.index')->with('sucesso','Funcionário alterado com sucesso!');
+        return redirect()->route('funcionarios.index')->with('sucesso', 'Funcionário alterado com sucesso!');
     }
 
     /**
@@ -137,7 +163,7 @@ class FuncionarioController extends Controller
 
         // Exclui a foto do funcionário
         if ($funcionario['foto'] != null) {
-            Storage::delete('public/funcionarios/'.$funcionario['foto']);
+            Storage::delete('public/funcionarios/' . $funcionario['foto']);
         }
         // Apagando o registro no banco de dados
         $funcionario->delete();

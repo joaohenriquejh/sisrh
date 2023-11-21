@@ -30,6 +30,7 @@
                     <td>{{ $departamento->nome }}</td>
                     <td>
                         <a href="{{ route('departamentos.edit', $departamento->id) }}" title="Editar" class="btn btn-primary"><i class="bi bi-pen"></i></a>
+                        <a href="{{ route('departamentos.show', $departamento->id) }}" title="Show" class="btn btn-info"><i class="bi bi-info-circle-fill"></i></a>
                     </td>
                 </tr>
             @endforeach

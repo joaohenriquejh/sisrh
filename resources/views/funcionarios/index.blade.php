@@ -58,6 +58,7 @@
                             <x-slot name="nome">{{ $funcionario->nome }}</x-slot>
                             <x-slot name="rota">funcionarios.destroy</x-slot>
                         </x-modal-delete>
+                        <a href="{{ route('funcionarios.show', $funcionario->id) }}" title="Show" class="btn btn-info"><i class="bi bi-info-circle-fill"></i></a>
                     </td>
                 </tr>
             @endforeach

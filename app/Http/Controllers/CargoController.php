@@ -28,7 +28,7 @@ class CargoController extends Controller
     public function create()
     {
         $cargos = Cargo::all()->sortBy('descricao');
-        return view('cargos.create', compact('cargos'));
+        return view('cargos.create', ['modo' => 'create'], compact('cargos'));
     }
 
     /**
@@ -37,7 +37,7 @@ class CargoController extends Controller
     public function store(Request $request)
     {
         $input = $request->toArray();
-        $input['user_id'] = 1;
+        $input['user_id'] = auth()->user()->id;
 
 
         Cargo::create($input);
@@ -49,7 +49,13 @@ class CargoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $cargo = Cargo::find($id);
+
+        if (!$cargo) {
+            return back();
+        }
+        $cargos = Cargo::all()->sortBy('nome');
+        return view('cargos.show', ['modo' => 'show', 'cargo' => $cargo], compact('cargo', 'cargos'));
     }
 
     /**
@@ -63,7 +69,7 @@ class CargoController extends Controller
             return back();
         }
         $cargos = Cargo::all()->sortBy('nome');
-        return view('cargos.edit', compact('cargo', 'cargos'));
+        return view('cargos.edit', ['modo' => 'edit', 'cargo' => $cargo], compact('cargo', 'cargos'));
     }
 
     /**
@@ -85,6 +91,5 @@ class CargoController extends Controller
      */
     public function destroy(string $id)
     {
-
     }
 }

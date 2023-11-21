@@ -1,15 +1,24 @@
-<div class="col-md-6">
+<div class="col-md-4">
     <label for="nome" class="form-label">Nome</label>
-    <input type="name" class="form-control" id="nome" name="nome" value="{{ $funcionario->nome ?? '' }}">
+    <input type="name" class="form-control" id="nome" name="nome" value="{{ $funcionario->nome ?? '' }}" required
+        @if ($modo == 'show') readonly @endif>
 </div>
-<div class="col-md-6">
+<div class="col-md-4">
     <label for="data_nasc" class="form-label">Data de Nascimento</label>
     <input type="date" class="form-control" id="data_nasc" name="data_nasc"
-        value="{{ $funcionario->data_nasc ?? '' }}" required>
+        value="{{ $funcionario->data_nasc ?? '' }}" required @if ($modo == 'show') readonly @endif>
+</div>
+<div class="col-md-4">
+    <label for="status" class="form-label">Status</label>
+    <select name="status" id="status" class="form-select" @if ($modo == 'show') disabled @endif>
+        <option value="on" @if (isset($funcionario->status)) @selected($funcionario->status == 'on') @endif>on</option>
+        <option value="off" @if (isset($funcionario->status)) @selected($funcionario->status == 'off') @endif>off</option>
+    </select>
 </div>
 <div class="col-md-4">
     <label for="sexo" class="form-label">Sexo</label>
-    <select name="sexo" id="sexo" class="form-select" required>
+    <select name="sexo" id="sexo" class="form-select" required
+        @if ($modo == 'show') disabled @endif>
         <option value=""></option>
         <option value="m" @if (isset($funcionario->sexo)) @selected($funcionario->sexo == 'm') @endif>Masculino
         </option>
@@ -22,21 +31,22 @@
 <div class="col-md-4">
     <label for="cpf" class="form-label">CPF</label>
     <input type="text" class="form-control" id="cpf" name="cpf" value="{{ $funcionario->cpf ?? '' }}"
-        minlength="11" maxlength="11" required>
+        minlength="11" maxlength="11" required @if ($modo == 'show') readonly @endif>
 </div>
 <div class="col-md-4">
     <label for="email" class="form-label">E-mail</label>
     <input type="email" class="form-control" id="email" name="email" value="{{ $funcionario->email ?? '' }}"
-        required>
+        required @if ($modo == 'show') readonly @endif>
 </div>
 <div class="col-md-4">
     <label for="telefone" class="form-label">Telefone</label>
     <input type="telefone" class="form-control" id="telefone" name="telefone"
-        value="{{ $funcionario->telefone ?? '' }}" required>
+        value="{{ $funcionario->telefone ?? '' }}" required @if ($modo == 'show') readonly @endif>
 </div>
 <div class="col-md-4">
     <label for="departamento_id" class="form-label">Departamento</label>
-    <select id="departamento_id" class="form-select" name="departamento_id" required>
+    <select id="departamento_id" class="form-select" name="departamento_id" required
+        @if ($modo == 'show') disabled @endif>
         <option value="">--</option>
         @foreach ($departamentos as $departamento)
             <option value="{{ $departamento->id }}"
@@ -48,11 +58,11 @@
 </div>
 <div class="col-md-4">
     <label for="cargo_id" class="form-label">Cargo</label>
-    <select id="cargo_id" class="form-select" name="cargo_id" required>
+    <select id="cargo_id" class="form-select" name="cargo_id" required
+        @if ($modo == 'show') disabled @endif>
         <option value="">--</option>
         @foreach ($cargos as $cargo)
-            <option value="{{ $cargo->id }}"
-                @if (isset($funcionario->cargo_id)) @selected($funcionario->cargo_id == $cargo->id) @endif>
+            <option value="{{ $cargo->id }}" @if (isset($funcionario->cargo_id)) @selected($funcionario->cargo_id == $cargo->id) @endif>
                 {{ $cargo->descricao }}
             </option>
         @endforeach
@@ -61,17 +71,18 @@
 <div class="col-md-4">
     <label for="salario" class="form-label">Salário</label>
     <input type="text" class="form-control" id="salario" name="salario" value="{{ $funcionario->salario ?? '' }}"
-        required>
+        required @if ($modo == 'show') readonly @endif>
 </div>
 <div class="col-md-4">
     <label for="data_contratacao" class="form-label">Data de Contratação</label>
     <input type="date" class="form-control" id="data_contratacao" name="data_contratacao"
-        value="{{ $funcionario->data_contratacao ?? '' }}" required>
+        value="{{ $funcionario->data_contratacao ?? '' }}" required
+        @if ($modo == 'show') readonly @endif>
 </div>
 <div class="col-md-4">
     <label for="data_desligamento" class="form-label">Data de Desligamento</label>
     <input type="date" class="form-control" id="data_desligamento" name="data_desligamento"
-        value="{{ $funcionario->data_desligamento ?? '' }}">
+        value="{{ $funcionario->data_desligamento ?? '' }}" @if ($modo == 'show') readonly @endif>
 </div>
 <div class="col-2">
     @if (isset($funcionario->foto))
@@ -80,9 +91,11 @@
         <img src="/images/sombra_funcionario.jpg" alt="" class="img-thumbnail">
     @endif
 </div>
+
 <div class="col-md-6">
     <label for="foto" class="form-label">Foto</label>
-    <input type="file" class="form-control" id="foto" name="foto">
+    <input type="file" class="form-control" id="foto" name="foto"
+        @if ($modo == 'show') disabled @endif>
 </div>
 
 <div class="col-md-4">
@@ -90,9 +103,19 @@
     <div>
         @foreach ($beneficios as $beneficio)
             <input type="checkbox" value="{{ $beneficio->id }}" name="beneficios[]"
-            @if (isset($funcionario->beneficios))
-                @checked(in_array($beneficio->id, $beneficio_selecionados))
-            @endif> {{ $beneficio->descricao }} <br>
+                @if ($modo == 'show') disabled @endif
+                @if (isset($funcionario->beneficios)) @checked(in_array($beneficio->id, $beneficio_selecionados)) @endif> {{ $beneficio->descricao }}
+            <br>
         @endforeach
     </div>
+</div>
+
+<div class="col-md-2">
+    @if ($modo == 'create')
+    @elseif (isset($funcionario->user_id))
+        <h5>Cadastrado por:</h5>
+        <input type="text" class="form-control" id="cadastradoPor" name="cadastradoPor"
+            value="{{ $cadastradoPor->name ?? '' }}" readonly>
+    @else
+    @endif
 </div>

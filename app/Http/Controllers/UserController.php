@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
+
 class UserController extends Controller
 {
     public function __construct()
@@ -26,22 +27,37 @@ class UserController extends Controller
         }
         // Receber os dados do banco através do model
 
+
     }
 
     public function create()
     {
         // Retornar o formulário de cadastro
         $users = User::all()->sortBy('name');
-        return view('users.create', compact('users'));
+        return view('users.create', ['modo' => 'create'], compact('users'));
     }
 
     public function store(Request $request)
     {
         $input = $request->toArray(); //Array que recebe os valores dos campos da view através do objeto request
-        $input['password'] = bcrypt($input['password']); // Linha que criptografa a senha do usuário com o método bcrypt, antes de guardar no banco
+        $input['password'] = bcrypt($input['password']);
 
         User::create($input);
         return redirect()->route('users.index')->with('sucesso', 'Usuário cadastrado com sucesso');
+    }
+
+    public function show(string $id){
+        $user = User::find($id);
+
+        if (!$user) {
+            return back();
+        }
+
+        if (auth()->user()->id == $user['id'] || auth()->user()->tipo == 'admin') {
+            return view('users.show', ['modo' => 'show', 'user' => $user], compact('user'));
+        } else {
+            return back();
+        }
     }
 
     public function edit(string $id)
@@ -53,7 +69,7 @@ class UserController extends Controller
         }
 
         if (auth()->user()->id == $user['id'] || auth()->user()->tipo == 'admin') {
-            return view('users.edit', compact('user'));
+            return view('users.edit', ['modo' => 'edit', 'user' => $user], compact('user'));
         } else {
             return back();
         }
@@ -72,11 +88,12 @@ class UserController extends Controller
         }
 
         $user->fill($input);
+
         $user->save();
         if ($user->tipo == "admin") {
             return redirect()->route('users.index')->with('sucesso', 'Usuário alterado com sucesso!');
-        }else{
-            return redirect()->route('users.edit', $user->id)->with('sucesso','Usuário alterado com sucesso!');
+        } else {
+            return redirect()->route('users.edit', $user->id)->with('sucesso', 'Usuário alterado com sucesso!');
         }
     }
 

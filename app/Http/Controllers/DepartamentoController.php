@@ -30,7 +30,7 @@ class DepartamentoController extends Controller
     {
         // Retornar o formulário de cadastro
         $departamentos = Departamento::all()->sortBy('nome');
-        return view('departamentos.create', compact('departamentos'));
+        return view('departamentos.create', ['modo' => 'create'], compact('departamentos'));
     }
 
     /**
@@ -39,7 +39,7 @@ class DepartamentoController extends Controller
     public function store(Request $request)
     {
         $input = $request->toArray();
-        $input['user_id'] = 1;
+        $input['user_id'] = auth()->user()->id;
 
 
         Departamento::create($input);
@@ -51,7 +51,13 @@ class DepartamentoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $departamento = Departamento::find($id);
+
+        if (!$departamento) {
+            return back();
+        }
+        $departamentos = Departamento::all()->sortBy('nome');
+        return view('departamentos.show', ['modo' => 'show', 'departamento' => $departamento], compact('departamento', 'departamentos'));
     }
 
     /**
@@ -65,7 +71,7 @@ class DepartamentoController extends Controller
             return back();
         }
         $departamentos = Departamento::all()->sortBy('nome');
-        return view('departamentos.edit', compact('departamento', 'departamentos'));
+        return view('departamentos.edit', ['modo' => 'edit', 'departamento' => $departamento], compact('departamento', 'departamentos'));
     }
 
     /**
@@ -79,7 +85,7 @@ class DepartamentoController extends Controller
 
         $departamento->fill($input);
         $departamento->save();
-        return redirect()->route('departamentos.index')->with('sucesso','Departamento alterado com sucesso!');
+        return redirect()->route('departamentos.index')->with('sucesso', 'Departamento alterado com sucesso!');
     }
 
     /**
@@ -87,6 +93,5 @@ class DepartamentoController extends Controller
      */
     public function destroy(string $id)
     {
-
     }
 }
