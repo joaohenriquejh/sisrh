@@ -10,7 +10,7 @@
 </div>
 <div class="col-md-4">
     <label for="status" class="form-label">Status</label>
-    <select name="status" id="status" class="form-select" @if ($modo == 'show') disabled @endif>
+    <select name="status" id="status" class="form-select" @if ($modo == 'show') disabled @elseif ($modo == 'create') disabled @endif>
         <option value="on" @if (isset($funcionario->status)) @selected($funcionario->status == 'on') @endif>on</option>
         <option value="off" @if (isset($funcionario->status)) @selected($funcionario->status == 'off') @endif>off</option>
     </select>
